@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 
 app.post("/api/ask", async (req, res) => {
     const { question } = req.body;
@@ -17,14 +17,14 @@ app.post("/api/ask", async (req, res) => {
     }
 
     try {
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${OPENAI_API_KEY}`,
+                "Authorization": `Bearer ${DEEPSEEK_API_KEY}`,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                model: "gpt-3.5-turbo",
+                model: "deepseek-chat",
                 messages: [{ role: "user", content: question }]
             })
         });
@@ -32,7 +32,8 @@ app.post("/api/ask", async (req, res) => {
         const data = await response.json();
         res.json({ answer: data.choices[0].message.content });
     } catch (error) {
-        res.status(500).json({ error: "Error fetching response from OpenAI" });
+        console.error("Error:", error);
+        res.status(500).json({ error: "Error fetching response from DeepSeek AI" });
     }
 });
 
