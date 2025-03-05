@@ -32,10 +32,11 @@ app.post("/api/ask", async (req, res) => {
         const data = await response.json();
         res.json({ answer: data.choices[0].message.content });
     } catch (error) {
-        console.error("Error:", error);
+        console.error("Error fetching from DeepSeek API:", error);
         res.status(500).json({ error: "Error fetching response from DeepSeek AI" });
     }
 });
 
+// ✅ Make sure this is at the bottom of your file
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
